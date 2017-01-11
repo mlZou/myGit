@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登陆</title>
+	</head>
+	<script src="js/jquery-confirm.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery-3.1.1.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('#btn').click(function() {
+				var $username = $('[name=username]').val();
+				var $password = $('[name=password]').val();
+				$.post('login.php', {
+					username: $username,
+					password: $password
+				}, function(res) {
+					if(res){
+					//console.log(res);
+					window.location.href = 'index.html'; 
+					}else{
+						window.location.href = 'false.html';
+					}
+				})
+			})
+		})
+	</script>
+	<body>
+		<h1>用户登陆页面</h1>
+		<form>
+			<label>姓名:<input type="text" name="username" /></label><br><br>
+			<label>密码:<input type="password" name="password" /></label><br><br>
+			
+			<button id = 'btn'>登录</button>
+		</form>
+	</body>
+</html>

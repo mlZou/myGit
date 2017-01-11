@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>注册页面</title>
+		<script src="js/jquery-3.1.1.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function() {
+				$(':submit').click(function() {
+					var $username = $('[name=username]').val();
+					var $password = $('[name=password]').val();
+					var $passwordcheck = $('[name=passwordcheck]').val();
+					var $gender = $('[name=gender]:checked').val();
+					if($password != $passwordcheck) {
+						alert('密码不一致!!');
+						return;
+					}
+					$.post('register.php', {
+						username: $username,
+						password: $password,
+						gender: $gender
+					}, function(res) {
+						if(res){
+							window.location.href = 'success.html'; 
+						}else{
+							alert('注册失败！');
+							window.location.href = 'register.html';
+						}
+					})
+					return false;
+				})
+
+			})
+			
+		</script>
+	</head>
+
+	<body>
+		<h1>用户注册页面</h1>
+		<form>
+			<label>姓名:<input type="text" name="username" /></label><br><br>
+			<label>密码:<input type="password" name="password" /></label><br><br>
+			<label>确认密码:<input type="password" name="passwordcheck" /></label><br><br> 性别：
+			<label><input type="radio" name="gender" value="男"/>男</label>
+			<label><input type="radio" name="gender" value="女" />女<label ><br><br>
+			<input type="submit" value="提交"/>
+		</form>
+	</body>
+</html>

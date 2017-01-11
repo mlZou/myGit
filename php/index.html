@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>主页</title>
+	<style>
+		ul{list-style: none;}
+		li{
+			width:500px;
+			height:50px;
+			color:#CFCFCF;
+			
+			line-height: 50px;
+		}
+		li > input{
+			outline: none;
+			margin-left: 20px;
+		}
+		li > button{
+			margin-left: 30px;
+		}
+	</style>
+	</head>
+	<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery-3.1.1.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	$(function(){
+		var idx; 
+		$.post('index.php',function(res){
+			var obj = JSON.parse(res)[0];
+			idx = obj.id;
+			var $datalist = $('#datalist');
+			var $ul = $('<ul/>');
+			var o = {username:'用户名:',gender:'性&nbsp;别:',password:'密&nbsp;码:'};
+			$.each(obj, function(attr1,val1){
+			//console.log(idx,item);
+				if(attr1 != 'id'){
+					var $li = $('<li/>');
+					$.each(o, function(attr2,val2) {
+						if(attr1 == attr2){
+							create($li,val2,val1,attr1);
+						}
+					});
+					$li.appendTo($ul);
+				}				
+			});
+			$ul.appendTo($datalist);
+			$('button').click(function(){
+				$(this).parent().find(':input').val('').prop('readonly',false)[0].focus();
+			})
+		})
+		$(':submit').click(function(){
+			var $username = $('[name=username]').val();
+			var $password = $('[name=password]').val();
+			var $gender = $('[name=gender]').val();
+			console.log($gender);
+			if($gender == '男' || $gender == '女'){
+				$.post('update.php',{
+					username:$username,
+					password:$password,
+					gender:$gender,
+					id:idx},function(res){
+						console.log(res);
+					if(res){
+						alert('修改成功！');
+						window.location.href = 'index.html';
+					}else{
+						alert('修改失败！');
+					}
+				})
+			}else{
+				alert('性别为男或女！');
+			}
+			
+		})
+	})
+	
+	
+	function create(ele,va,value,at){
+		var $span = $('<span/>');
+		$span.html(va).appendTo(ele);
+		var $input = $('<input/>');
+		$input.attr('name',at).prop('readonly',true).val(value).appendTo(ele);
+		var $btn = $('<button/>');
+		$btn.html('修改').appendTo(ele);
+	}
+	</script>
+	<body>	
+		<h1>个人信息</h1>
+		<div id = 'datalist'></div>
+		<input type="submit" value = '保存'/>
+	</body>
+</html>
